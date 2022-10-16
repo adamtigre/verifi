@@ -1,0 +1,27 @@
+.nav {
+    height: 170px;    
+}
+
+.logo_img {
+    height: 110px;
+    width: 120px;
+}
+
+.nav-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+
+.logo_name {
+    font-size: 50px;
+    font-family: 'Kaushan Script', cursive;
+    color: rgb(71, 71, 255);    
+}
+
+.nav-item button {
+    border-radius: 5px;
+    padding: 5px 10px;
+    border-color: blue;
+    background-color: white;
+}

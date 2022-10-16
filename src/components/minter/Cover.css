@@ -1,0 +1,45 @@
+.cover_page {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.cover_page img {
+    width: 400px;
+    height: 400px;
+}
+
+.cover_text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.cover_text h1 {
+    text-align: center;        
+    margin-bottom: 20px;
+}
+
+.cover_text div {
+    font-size: 50px;
+    font-style: italic;
+    color: rgb(71, 71, 255);
+    margin-bottom: 35px;
+    font-family: 'Kaushan Script', cursive;
+}
+
+.cover_text p {
+    width: 80%;
+    text-align: center;
+}
+
+.cover_text button {
+    margin-top: 30px;
+    border-radius: 10px;
+    background-color: blue;
+    color: white;
+    padding: 5px 10px ;
+}
