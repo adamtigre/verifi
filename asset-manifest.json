@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/verifi/static/css/main.1bef4d3c.chunk.css",
+    "main.js": "/verifi/static/js/main.ac48f641.chunk.js",
+    "main.js.map": "/verifi/static/js/main.ac48f641.chunk.js.map",
+    "runtime-main.js": "/verifi/static/js/runtime-main.3047197f.js",
+    "runtime-main.js.map": "/verifi/static/js/runtime-main.3047197f.js.map",
+    "static/css/2.13000687.chunk.css": "/verifi/static/css/2.13000687.chunk.css",
+    "static/js/2.be6d2f25.chunk.js": "/verifi/static/js/2.be6d2f25.chunk.js",
+    "static/js/2.be6d2f25.chunk.js.map": "/verifi/static/js/2.be6d2f25.chunk.js.map",
+    "index.html": "/verifi/index.html",
+    "static/css/2.13000687.chunk.css.map": "/verifi/static/css/2.13000687.chunk.css.map",
+    "static/css/main.1bef4d3c.chunk.css.map": "/verifi/static/css/main.1bef4d3c.chunk.css.map",
+    "static/js/2.be6d2f25.chunk.js.LICENSE.txt": "/verifi/static/js/2.be6d2f25.chunk.js.LICENSE.txt",
+    "static/media/bootstrap-icons.css": "/verifi/static/media/bootstrap-icons.ea98e12d.woff2",
+    "static/media/bronze_star.95e97c01.png": "/verifi/static/media/bronze_star.95e97c01.png",
+    "static/media/gold_star.6293ae81.png": "/verifi/static/media/gold_star.6293ae81.png",
+    "static/media/logo.68599634.png": "/verifi/static/media/logo.68599634.png",
+    "static/media/silver_star.23fe0d56.png": "/verifi/static/media/silver_star.23fe0d56.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3047197f.js",
+    "static/css/2.13000687.chunk.css",
+    "static/js/2.be6d2f25.chunk.js",
+    "static/css/main.1bef4d3c.chunk.css",
+    "static/js/main.ac48f641.chunk.js"
+  ]
+}
