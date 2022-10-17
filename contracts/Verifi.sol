@@ -16,15 +16,15 @@ contract Verifi is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         uint256 certId;
         address owner;
         address[] validators;
-        mapping(address => bool) validated;
     }
 
     mapping(uint256 => Cert) private certs;
     mapping(address => bool) private _isBoardMember;
+    mapping(uint256 => mapping(address => bool)) private validated;
     address[] private boardMembers;
 
     modifier isBoardMember() {
-        require(isBoardMember[msg.sender], "You are not a board member");
+        require(_isBoardMember[msg.sender], "You are not a board member");
         _;
     }
 
@@ -52,16 +52,26 @@ contract Verifi is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     /// @dev Add a new board member that can verify certificates
     function addBoardMember(address _memberAddress) public isBoardMember {
-        require(_memberAddress != address(0), "Error: Address zero is not a valid address");
+        require(
+            _memberAddress != address(0),
+            "Error: Address zero is not a valid address"
+        );
+        require(
+            !_isBoardMember[_memberAddress],
+            "The address is already a board member"
+        );
+        _isBoardMember[_memberAddress] = true;
         boardMembers.push(_memberAddress);
     }
 
     /// @dev allow bord members to verify a certificate
     function verifyCertificate(uint256 certId) public isBoardMember {
         require(_exists(certId), "Query of nonexistent certificate");
-        Cert storage cert = certs[certId];
-        require(!cert.validated[msg.sender], "You can't validate a certificate more than once");
-        cert.validated[msg.sender] = true;
+        require(
+            !validated[certId][msg.sender],
+            "You can't validate a certificate more than once"
+        );
+        validated[certId][msg.sender] = true;
         certs[certId].validators.push(msg.sender);
     }
 
