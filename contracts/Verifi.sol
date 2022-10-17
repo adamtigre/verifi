@@ -16,71 +16,61 @@ contract Verifi is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         uint256 certId;
         address owner;
         address[] validators;
+        mapping(address => bool) validated;
     }
 
     mapping(uint256 => Cert) private certs;
+    mapping(address => bool) private _isBoardMember;
     address[] private boardMembers;
 
     modifier isBoardMember() {
-        bool isMember = false;
-        for (uint256 i = 0; i < boardMembers.length; i++) {
-            if (boardMembers[i] == msg.sender) {
-                isMember = true;
-                break;
-            }
-        }
-        require(isMember, "Only board members allowed to call this function");
+        require(isBoardMember[msg.sender], "You are not a board member");
         _;
     }
 
     constructor() ERC721("Verified Certificate", "VRC") {
+        _isBoardMember[msg.sender] = true;
         boardMembers.push(msg.sender);
     }
 
-    // Mint new NFT
-    function mint(string memory _tokenURI) public returns (uint256) {
-        require(bytes(_tokenURI).length > 7, "Enter a valid token uri"); //ipfs uri starts with "ipfs://"
+    /// @dev Mint new NFT
+    /// @notice Token Uri needs to non-empty and valid
+    function mint(string calldata _tokenURI) public returns (uint256) {
+        require(bytes(_tokenURI).length > 8, "Enter a valid token uri"); //ipfs uri on frontend starts with "https://"
         uint256 id = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
         _safeMint(msg.sender, id);
         _setTokenURI(id, _tokenURI);
 
         // create cert here
-        address[] memory _validators;
-        certs[id] = Cert(id, msg.sender, _validators);
+        Cert storage currentCert = certs[id];
+        currentCert.certId = id;
+        currentCert.owner = msg.sender;
 
-        _tokenIdCounter.increment();
         return (id);
     }
 
-    // Add a new board member that can verify certificates
+    /// @dev Add a new board member that can verify certificates
     function addBoardMember(address _memberAddress) public isBoardMember {
+        require(_memberAddress != address(0), "Error: Address zero is not a valid address");
         boardMembers.push(_memberAddress);
     }
 
-    // Verify a certificate
+    /// @dev allow bord members to verify a certificate
     function verifyCertificate(uint256 certId) public isBoardMember {
+        require(_exists(certId), "Query of nonexistent certificate");
         Cert storage cert = certs[certId];
-        bool hasValidated = false;
-        for (uint256 i = 0; i < cert.validators.length; i++) {
-            if (cert.validators[i] == msg.sender) {
-                hasValidated = true;
-                break;
-            }
-        }
-
-        require(
-            !hasValidated,
-            "You can't validate a certificate more than once"
-        );
+        require(!cert.validated[msg.sender], "You can't validate a certificate more than once");
+        cert.validated[msg.sender] = true;
         certs[certId].validators.push(msg.sender);
     }
 
-    // Get all board members
+    /// @dev Get all board members
     function getBoardMembers() public view returns (address[] memory) {
         return boardMembers;
     }
 
-    // Get all certificates from storage
+    /// @dev Get all certificates from storage
     function getCerts() public view returns (Cert[] memory) {
         uint256 total = _tokenIdCounter.current();
         Cert[] memory certificates = new Cert[](total);
