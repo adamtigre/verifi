@@ -19,17 +19,11 @@ contract Verifi is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     }
 
     mapping(uint256 => Cert) private certs;
+    mapping(address => bool) private isboardMember;
     address[] private boardMembers;
 
-    modifier isBoardMember() {
-        bool isMember = false;
-        for (uint256 i = 0; i < boardMembers.length; i++) {
-            if (boardMembers[i] == msg.sender) {
-                isMember = true;
-                break;
-            }
-        }
-        require(isMember, "Only board members allowed to call this function");
+    modifier onlyBoardMember() {
+        require(isboardMember[msg.sender], "not boardMember");
         _;
     }
 
@@ -53,12 +47,13 @@ contract Verifi is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     }
 
     // Add a new board member that can verify certificates
-    function addBoardMember(address _memberAddress) public isBoardMember {
+    function addBoardMember(address _memberAddress) public onlyBoardMember {
         boardMembers.push(_memberAddress);
+        isboardMember[_memberAddress] = true;
     }
 
     // Verify a certificate
-    function verifyCertificate(uint256 certId) public isBoardMember {
+    function verifyCertificate(uint256 certId) public onlyBoardMember {
         Cert storage cert = certs[certId];
         bool hasValidated = false;
         for (uint256 i = 0; i < cert.validators.length; i++) {
@@ -73,6 +68,21 @@ contract Verifi is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
             "You can't validate a certificate more than once"
         );
         certs[certId].validators.push(msg.sender);
+    }
+
+    function removeBoardmember(address _memberAddress) public onlyBoardMember {
+        isboardMember[_memberAddress] = false;
+        //Identify the index of the member
+        uint index;
+        for(uint i = 0; i < boardMembers.length; i++){
+            if(boardMembers[i] == _memberAddress){
+            index = i;
+            }
+        }
+        
+        //Removing the element from the index
+        boardMembers[index] = boardMembers[boardMembers.length-1];
+        boardMembers.pop();
     }
 
     // Get all board members
